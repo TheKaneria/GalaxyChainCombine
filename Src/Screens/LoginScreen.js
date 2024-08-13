@@ -19,12 +19,30 @@ import Toast from 'react-native-simple-toast';
 import {useLoginContext} from '../Context/login_context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {Dropdown} from 'react-native-element-dropdown';
+
+const DATA = [
+  {
+    id: '1',
+    name: 'Galaxy Chains',
+    url: 'https://theapplified.com/galaxychain/api/v1/',
+    acc: 'application/x.galaxychain.v1+json',
+  },
+  {
+    id: '2',
+    name: 'Galaxy Conveyors',
+    url: 'https://theapplified.com/galaxyconveyors/api/v1/',
+    acc: 'application/x.galaxychain.v1+json',
+  },
+];
 
 const LoginScreen = props => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showpass, setShowPass] = useState(false);
   const {Loginapi, login_loading} = useLoginContext();
+  const [name, setName] = useState(DATA[0].name);
+  const [selectedItem, setSelectedItem] = useState(DATA[0]);
 
   const email_validation =
     /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
@@ -44,6 +62,13 @@ const LoginScreen = props => {
       Loginapi(formdata, props);
     }
   };
+
+  useEffect(() => {
+    // Set initial values in AsyncStorage
+    AsyncStorage.setItem('id', DATA[0].id);
+    AsyncStorage.setItem('url', DATA[0].url);
+    AsyncStorage.setItem('acc', DATA[0].acc);
+  }, []);
 
   return (
     <View style={{flex: 1, backgroundColor: colors.white}}>
@@ -66,7 +91,13 @@ const LoginScreen = props => {
               borderRadius: 10,
             }}>
             <Image
-              source={require('../Assets/Logo1.png')}
+              source={
+                name === 'Galaxy Chains'
+                  ? require('../Assets/Logo1.png')
+                  : name === 'Galaxy Conveyors'
+                  ? require('../Assets/LogoC1.png')
+                  : require('../Assets/Logo1.png')
+              }
               resizeMode="contain"
               style={{width: 250, height: 100}}
             />
@@ -78,7 +109,12 @@ const LoginScreen = props => {
         animation={'fadeInUpBig'}
         style={{
           flex: 4,
-          backgroundColor: colors.themecolor1,
+          backgroundColor:
+            name === 'Galaxy Chains'
+              ? 'red'
+              : name === 'Galaxy Conveyors'
+              ? colors.themecolor2
+              : 'red',
           borderTopLeftRadius: 40,
           borderTopRightRadius: 40,
         }}>
@@ -96,16 +132,17 @@ const LoginScreen = props => {
                 alignItems: 'center',
                 justifyContent: 'center',
                 alignSelf: 'center',
-                marginVertical: '10%',
+                marginVertical: '5%',
               }}>
               <Text
                 style={{
                   fontFamily: 'NunitoSans_10pt-Bold',
                   color: colors.white,
-                  fontSize: 25,
+                  fontSize: 22,
                   fontWeight: 'bold',
+                  textAlign: 'center',
                 }}>
-                Welcome Galaxy Chains
+                Welcome to {name ? name : 'Galaxy Chains'}
               </Text>
             </View>
 
@@ -116,13 +153,76 @@ const LoginScreen = props => {
                 backgroundColor: 'rgba(255,255,255,0.3)',
                 borderRadius: 10,
                 paddingVertical: '10%',
+                marginTop: '2%',
               }}>
+              <View
+                style={{
+                  width: '95%',
+                  alignSelf: 'center',
+                }}>
+                <Text
+                  style={{
+                    fontFamily: 'NunitoSans_10pt-ExtraBold',
+                    color: colors.white,
+                    marginLeft: 5,
+                    fontSize: 16,
+                    marginBottom: 5,
+                  }}>
+                  {' '}
+                  Company
+                </Text>
+                <Dropdown
+                  style={{
+                    height: 50,
+                    backgroundColor: '#fff',
+                    borderRadius: 8,
+                    paddingHorizontal: 8,
+                    marginHorizontal: '2%',
+                    marginBottom: '5%',
+                  }}
+                  placeholderStyle={{
+                    paddingHorizontal: '3%',
+                    color: colors.themecolor,
+                    fontSize: 15,
+                    fontFamily: 'NunitoSans_10pt-SemiBold',
+                  }}
+                  selectedTextStyle={{
+                    color: colors.themecolor,
+                    fontSize: 16,
+                    fontFamily: 'NunitoSans_10pt-SemiBold',
+                    paddingHorizontal: '3%',
+                  }}
+                  dropdownPosition="auto"
+                  itemContainerStyle={{
+                    backgroundColor: colors.whitesomke,
+                    borderColor: colors.whitesomke,
+                  }}
+                  itemTextStyle={{
+                    color: colors.themecolor,
+                    fontFamily: 'NunitoSans_10pt-SemiBold',
+                  }}
+                  data={DATA}
+                  maxHeight={300}
+                  labelField="name"
+                  value={selectedItem.id} // Set the selected value
+                  valueField="id"
+                  placeholder={'Select Mode'}
+                  onChange={item => {
+                    setName(item.name);
+                    setSelectedItem(item); // Update state with the selected item
+                    AsyncStorage.setItem('id', item.id);
+                    AsyncStorage.setItem('url', item.url);
+                    AsyncStorage.setItem('acc', item.acc);
+                  }}
+                />
+              </View>
+
               <View
                 style={{
                   width: '90%',
                   justifyContent: 'center',
                   alignSelf: 'center',
-                  marginBottom: '10%',
+                  marginBottom: '5%',
                 }}>
                 <Text
                   style={{
@@ -131,7 +231,6 @@ const LoginScreen = props => {
                     marginLeft: 2,
                     fontSize: 16,
                     marginBottom: 5,
-                    fontWeight: 'bold',
                   }}>
                   Email
                 </Text>
@@ -197,7 +296,13 @@ const LoginScreen = props => {
                     style={{
                       marginHorizontal: '4%',
                     }}
-                    color={colors.themecolor1}
+                    color={
+                      name === 'Galaxy Chains'
+                        ? colors.themecolor1
+                        : name === 'Galaxy Conveyors'
+                        ? colors.themecolor2
+                        : colors.themecolor1
+                    }
                     size={25}
                   />
                 </View>
@@ -206,7 +311,12 @@ const LoginScreen = props => {
                 // onPress={() => props.navigation.navigate('DashBoard')}
                 onPress={() => Submit()}
                 style={{
-                  backgroundColor: colors.themecolor,
+                  backgroundColor:
+                    name === 'Galaxy Chains'
+                      ? colors.themecolor
+                      : name === 'Galaxy Conveyors'
+                      ? colors.themecolor2
+                      : colors.themecolor,
                   width: 100,
                   marginTop: '10%',
                   alignItems: 'center',

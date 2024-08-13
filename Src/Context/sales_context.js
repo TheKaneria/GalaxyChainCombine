@@ -38,12 +38,15 @@ export const Salesprovider = ({children}) => {
   const {setLogout} = useLoginContext();
 
   const GetSales = async props => {
+    const base_url = await AsyncStorage.getItem('url');
+    const Accept_hedar = await AsyncStorage.getItem('acc');
+
     var Token = await AsyncStorage.getItem('token');
     dispatch({type: SALES_BEGIN});
     axios
-      .get(getsales_url, {
+      .get(base_url + 'all-sales-count', {
         headers: {
-          Accept: ACCEPT_HEADER,
+          Accept: Accept_hedar,
           Authorization: 'Bearer ' + Token,
         },
       })
@@ -61,12 +64,15 @@ export const Salesprovider = ({children}) => {
   };
 
   const GetQuotationOrder = async props => {
+    const base_url = await AsyncStorage.getItem('url');
+    const Accept_hedar = await AsyncStorage.getItem('acc');
+
     var Token = await AsyncStorage.getItem('token');
     dispatch({type: QUORDER_BEGIN});
     axios
-      .get(quotation_order_count_url, {
+      .get(base_url + 'quotation-order-count', {
         headers: {
-          Accept: ACCEPT_HEADER,
+          Accept: Accept_hedar,
           Authorization: 'Bearer ' + Token,
         },
       })
@@ -86,17 +92,20 @@ export const Salesprovider = ({children}) => {
   };
 
   const GetOverdue = async props => {
+    const base_url = await AsyncStorage.getItem('url');
+    const Accept_hedar = await AsyncStorage.getItem('acc');
+
     var Token = await AsyncStorage.getItem('token');
     dispatch({type: OVERDUE_BEGIN});
     axios
-      .get(overdue_report_url, {
+      .get(base_url + 'overdue-report', {
         headers: {
-          Accept: ACCEPT_HEADER,
+          Accept: Accept_hedar,
           Authorization: 'Bearer ' + Token,
         },
       })
       .then(res => {
-        console.log('res', JSON.stringify(res.data, null, 2));
+        // console.log('res', JSON.stringify(res.data, null, 2));
 
         if (res.data.status === 'Token is Expired') {
           setLogout(props);

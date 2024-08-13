@@ -30,13 +30,17 @@ const initialState = {
 export const Productprovider = ({children}) => {
   const [state, dispatch] = useReducer(Product_reducers, initialState);
   const {setLogout} = useLoginContext();
+
   const GetCodeData = async props => {
+    const base_url = await AsyncStorage.getItem('url');
+    const Accept_hedar = await AsyncStorage.getItem('acc');
+
     var Token = await AsyncStorage.getItem('token');
     dispatch({type: CODE_BEGIN});
     axios
-      .get(get_all_items_data_url, {
+      .get(base_url + 'get-all-items-data', {
         headers: {
-          Accept: ACCEPT_HEADER,
+          Accept: Accept_hedar,
           Authorization: 'Bearer ' + Token,
         },
       })
@@ -60,12 +64,15 @@ export const Productprovider = ({children}) => {
   };
 
   const GetProduct = async (props, fromdata) => {
+    const base_url = await AsyncStorage.getItem('url');
+    const Accept_hedar = await AsyncStorage.getItem('acc');
+
     var Token = await AsyncStorage.getItem('token');
     dispatch({type: PRODUCTION_BEGIN});
     axios
-      .post(getproduct_url, fromdata, {
+      .post(base_url + 'production-report', fromdata, {
         headers: {
-          Accept: ACCEPT_HEADER,
+          Accept: Accept_hedar,
           Authorization: 'Bearer ' + Token,
         },
       })

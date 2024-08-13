@@ -16,16 +16,19 @@ export const Loginprovider = ({children}) => {
   const [state, dispatch] = useReducer(Login_reducers, initialState);
 
   const Loginapi = async (param, props) => {
+    const base_url = await AsyncStorage.getItem('url');
+    const Accept_hedar = await AsyncStorage.getItem('acc');
+
     dispatch({type: LOGIN_BEGIN});
 
     axios
-      .post(login_check_url, param, {
+      .post(base_url + 'login', param, {
         headers: {
-          Accept: ACCEPT_HEADER,
+          Accept: Accept_hedar,
         },
       })
       .then(async res => {
-        console.log('resss', JSON.stringify(res.data, null, 2));
+        // console.log('resss', JSON.stringify(res.data, null, 2));
         if (res.data.success == 1) {
           AsyncStorage.setItem('token', res.data.token);
           Toast.show('Login successfully');

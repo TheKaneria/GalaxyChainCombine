@@ -17,10 +17,9 @@ const SplashScreen = props => {
   }, []);
 
   const handleAnimationStart = () => {
-    // Trigger "zoom out" after the initial "zoom in"
     setTimeout(() => {
       setAnimation(customZoomOut);
-    }, 2000); // Delay before zooming out
+    }, 2000);
   };
 
   const checklogin = async () => {

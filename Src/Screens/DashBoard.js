@@ -33,6 +33,22 @@ const DATA = [
 
 const DashBoard = props => {
   const [refreshing, setRefreshing] = useState(false);
+  const [id, setId] = useState('');
+
+  useEffect(() => {
+    const fetchId = async () => {
+      try {
+        const storedId = await AsyncStorage.getItem('id');
+        if (storedId !== null) {
+          setId(storedId);
+        }
+      } catch (error) {
+        console.error('Failed to retrieve id from AsyncStorage', error);
+      }
+    };
+
+    fetchId();
+  }, []);
 
   const {
     GetSales,
@@ -81,13 +97,24 @@ const DashBoard = props => {
   return (
     <View style={{flex: 1, backgroundColor: colors.white}}>
       <StatusBar
-        backgroundColor={colors.themecolor}
+        backgroundColor={
+          id === '1'
+            ? colors.themecolor
+            : id === '2'
+            ? colors.themecolor2
+            : colors.themecolor
+        }
         barStyle={'light-content'}
       />
 
       <View
         style={{
-          backgroundColor: colors.themecolor,
+          backgroundColor:
+            id === '1'
+              ? colors.themecolor
+              : id === '2'
+              ? colors.themecolor2
+              : colors.themecolor,
           height: metrics.HEIGHT * 0.08,
           paddingHorizontal: 20,
           alignItems: 'center',
@@ -135,44 +162,48 @@ const DashBoard = props => {
               colors={[colors.themecolor1]}
             />
           }>
-          <View
-            style={{
-              width: '95%',
-              alignItems: 'center',
-              alignSelf: 'center',
-              marginVertical: '5%',
-            }}>
-            <Ripple
-              onPress={() => {
-                props.navigation.navigate('Productnation');
-              }}
-              rippleColor={colors.white}
+          {id === '2' ? null : id === '1' ? (
+            <View
               style={{
-                backgroundColor: colors.themecolor,
-                width: '100%',
-                borderRadius: 10,
-                paddingVertical: '4%',
+                width: '95%',
                 alignItems: 'center',
-                justifyContent: 'space-between',
-                flexDirection: 'row',
-                paddingHorizontal: '8%',
+                alignSelf: 'center',
+                marginVertical: '5%',
               }}>
-              <Text
+              <Ripple
+                onPress={() => {
+                  props.navigation.navigate('Productnation');
+                }}
+                rippleColor={colors.white}
                 style={{
-                  color: colors.white,
-                  fontFamily: 'NunitoSans_10pt-ExtraBold',
-                  fontSize: 16,
+                  backgroundColor: colors.themecolor,
+                  width: '100%',
+                  borderRadius: 10,
+                  paddingVertical: '4%',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  flexDirection: 'row',
+                  paddingHorizontal: '8%',
                 }}>
-                Production Report
-              </Text>
-              <FontAwesome6
-                style={{marginLeft: '5%'}}
-                name="arrow-right"
-                size={16}
-                color={colors.white}
-              />
-            </Ripple>
-          </View>
+                <Text
+                  style={{
+                    color: colors.white,
+                    fontFamily: 'NunitoSans_10pt-ExtraBold',
+                    fontSize: 16,
+                  }}>
+                  Production Report
+                </Text>
+                <FontAwesome6
+                  style={{marginLeft: '5%'}}
+                  name="arrow-right"
+                  size={16}
+                  color={colors.white}
+                />
+              </Ripple>
+            </View>
+          ) : (
+            <></>
+          )}
 
           {/* sales */}
           <View style={{width: '95%', alignSelf: 'center', marginTop: 10}}>
@@ -181,7 +212,12 @@ const DashBoard = props => {
                 fontSize: 24,
                 textAlign: 'center',
                 fontFamily: 'NunitoSans_10pt-Bold',
-                color: colors.themecolor,
+                color:
+                  id === '1'
+                    ? colors.themecolor
+                    : id === '2'
+                    ? colors.themecolor2
+                    : colors.themecolor,
                 textTransform: 'uppercase',
               }}>
               Sales
@@ -205,7 +241,12 @@ const DashBoard = props => {
                   rippleOpacity={0.5}
                   rippleDuration={800}
                   style={{
-                    backgroundColor: colors.themecolor,
+                    backgroundColor:
+                      id === '1'
+                        ? colors.themecolor
+                        : id === '2'
+                        ? colors.themecolor2
+                        : colors.themecolor,
                     elevation: 5,
                     width: 'auto',
                     borderRadius: 10,
@@ -246,7 +287,12 @@ const DashBoard = props => {
                         fontFamily: 'NunitoSans_10pt-ExtraBold',
                         fontSize: 19,
                         textAlign: 'center',
-                        color: colors.themecolor,
+                        color:
+                          id === '1'
+                            ? colors.themecolor
+                            : id === '2'
+                            ? colors.themecolor2
+                            : colors.themecolor,
                       }}>
                       ({'\u20B9'}) {sales_info ? sales_info?.today_sales : 0}
                     </Text>
@@ -263,7 +309,12 @@ const DashBoard = props => {
                   rippleOpacity={0.5}
                   rippleDuration={800}
                   style={{
-                    backgroundColor: colors.themecolor,
+                    backgroundColor:
+                      id === '1'
+                        ? colors.themecolor
+                        : id === '2'
+                        ? colors.themecolor2
+                        : colors.themecolor,
                     elevation: 5,
                     width: 'auto',
                     borderRadius: 10,
@@ -304,7 +355,12 @@ const DashBoard = props => {
                         fontFamily: 'NunitoSans_10pt-ExtraBold',
                         fontSize: 19,
                         textAlign: 'center',
-                        color: colors.themecolor,
+                        color:
+                          id === '1'
+                            ? colors.themecolor
+                            : id === '2'
+                            ? colors.themecolor2
+                            : colors.themecolor,
                       }}>
                       ({'\u20B9'}) {sales_info ? sales_info?.monthly_sales : 0}
                     </Text>
@@ -321,7 +377,12 @@ const DashBoard = props => {
                   rippleOpacity={0.5}
                   rippleDuration={800}
                   style={{
-                    backgroundColor: colors.themecolor,
+                    backgroundColor:
+                      id === '1'
+                        ? colors.themecolor
+                        : id === '2'
+                        ? colors.themecolor2
+                        : colors.themecolor,
                     elevation: 5,
                     width: 'auto',
                     borderRadius: 10,
@@ -362,7 +423,12 @@ const DashBoard = props => {
                         fontFamily: 'NunitoSans_10pt-ExtraBold',
                         fontSize: 19,
                         textAlign: 'center',
-                        color: colors.themecolor,
+                        color:
+                          id === '1'
+                            ? colors.themecolor
+                            : id === '2'
+                            ? colors.themecolor2
+                            : colors.themecolor,
                       }}>
                       ({'\u20B9'}){' '}
                       {sales_info ? sales_info?.current_fy_sales : 0}
@@ -380,7 +446,12 @@ const DashBoard = props => {
                 fontSize: 24,
                 textAlign: 'center',
                 fontFamily: 'NunitoSans_10pt-Bold',
-                color: colors.themecolor,
+                color:
+                  id === '1'
+                    ? colors.themecolor
+                    : id === '2'
+                    ? colors.themecolor2
+                    : colors.themecolor,
                 textTransform: 'uppercase',
               }}>
               Quotation
@@ -404,7 +475,12 @@ const DashBoard = props => {
                   rippleOpacity={0.5}
                   rippleDuration={800}
                   style={{
-                    backgroundColor: colors.themecolor,
+                    backgroundColor:
+                      id === '1'
+                        ? colors.themecolor
+                        : id === '2'
+                        ? colors.themecolor2
+                        : colors.themecolor,
                     elevation: 5,
                     width: 'auto',
                     borderRadius: 10,
@@ -443,7 +519,12 @@ const DashBoard = props => {
                         fontFamily: 'NunitoSans_10pt-ExtraBold',
                         fontSize: 19,
                         textAlign: 'center',
-                        color: colors.themecolor,
+                        color:
+                          id === '1'
+                            ? colors.themecolor
+                            : id === '2'
+                            ? colors.themecolor2
+                            : colors.themecolor,
                       }}>
                       {Quodrder_info ? Quodrder_info?.today_quotation : 0}
                     </Text>
@@ -460,7 +541,12 @@ const DashBoard = props => {
                   rippleOpacity={0.5}
                   rippleDuration={800}
                   style={{
-                    backgroundColor: colors.themecolor,
+                    backgroundColor:
+                      id === '1'
+                        ? colors.themecolor
+                        : id === '2'
+                        ? colors.themecolor2
+                        : colors.themecolor,
                     elevation: 5,
                     width: 'auto',
                     borderRadius: 10,
@@ -499,7 +585,12 @@ const DashBoard = props => {
                         fontFamily: 'NunitoSans_10pt-ExtraBold',
                         fontSize: 19,
                         textAlign: 'center',
-                        color: colors.themecolor,
+                        color:
+                          id === '1'
+                            ? colors.themecolor
+                            : id === '2'
+                            ? colors.themecolor2
+                            : colors.themecolor,
                       }}>
                       {Quodrder_info ? Quodrder_info?.monthly_quotation : 0}
                     </Text>
@@ -516,7 +607,12 @@ const DashBoard = props => {
                   rippleOpacity={0.5}
                   rippleDuration={800}
                   style={{
-                    backgroundColor: colors.themecolor,
+                    backgroundColor:
+                      id === '1'
+                        ? colors.themecolor
+                        : id === '2'
+                        ? colors.themecolor2
+                        : colors.themecolor,
                     elevation: 5,
                     width: 'auto',
                     borderRadius: 10,
@@ -555,7 +651,12 @@ const DashBoard = props => {
                         fontFamily: 'NunitoSans_10pt-ExtraBold',
                         fontSize: 19,
                         textAlign: 'center',
-                        color: colors.themecolor,
+                        color:
+                          id === '1'
+                            ? colors.themecolor
+                            : id === '2'
+                            ? colors.themecolor2
+                            : colors.themecolor,
                       }}>
                       {Quodrder_info ? Quodrder_info?.current_fy_quotation : 0}{' '}
                     </Text>
@@ -572,7 +673,12 @@ const DashBoard = props => {
                 fontSize: 18,
                 textAlign: 'center',
                 fontFamily: 'NunitoSans_10pt-Bold',
-                color: colors.themecolor,
+                color:
+                  id === '1'
+                    ? colors.themecolor
+                    : id === '2'
+                    ? colors.themecolor2
+                    : colors.themecolor,
                 textTransform: 'uppercase',
               }}>
               Order Converted & Order Received
@@ -596,7 +702,12 @@ const DashBoard = props => {
                   rippleOpacity={0.5}
                   rippleDuration={800}
                   style={{
-                    backgroundColor: colors.themecolor,
+                    backgroundColor:
+                      id === '1'
+                        ? colors.themecolor
+                        : id === '2'
+                        ? colors.themecolor2
+                        : colors.themecolor,
                     elevation: 5,
                     width: 'auto',
                     borderRadius: 10,
@@ -638,7 +749,12 @@ const DashBoard = props => {
                         fontFamily: 'NunitoSans_10pt-Bold',
                         fontSize: 19,
                         textAlign: 'center',
-                        color: colors.themecolor,
+                        color:
+                          id === '1'
+                            ? colors.themecolor
+                            : id === '2'
+                            ? colors.themecolor2
+                            : colors.themecolor,
                       }}>
                       Converted
                     </Text>
@@ -647,7 +763,12 @@ const DashBoard = props => {
                         fontFamily: 'NunitoSans_10pt-ExtraBold',
                         fontSize: 19,
                         textAlign: 'center',
-                        color: colors.themecolor,
+                        color:
+                          id === '1'
+                            ? colors.themecolor
+                            : id === '2'
+                            ? colors.themecolor2
+                            : colors.themecolor,
                         flex: 1,
                         alignItems: 'flex-start',
                       }}>
@@ -674,7 +795,12 @@ const DashBoard = props => {
                         fontFamily: 'NunitoSans_10pt-Bold',
                         fontSize: 19,
                         textAlign: 'center',
-                        color: colors.themecolor,
+                        color:
+                          id === '1'
+                            ? colors.themecolor
+                            : id === '2'
+                            ? colors.themecolor2
+                            : colors.themecolor,
                       }}>
                       Received
                     </Text>
@@ -685,7 +811,12 @@ const DashBoard = props => {
                         fontFamily: 'NunitoSans_10pt-ExtraBold',
                         fontSize: 19,
                         textAlign: 'center',
-                        color: colors.themecolor,
+                        color:
+                          id === '1'
+                            ? colors.themecolor
+                            : id === '2'
+                            ? colors.themecolor2
+                            : colors.themecolor,
                       }}>
                       {Quodrder_info
                         ? Quodrder_info?.today_order_converted_in_invoice
@@ -704,7 +835,12 @@ const DashBoard = props => {
                   rippleOpacity={0.5}
                   rippleDuration={800}
                   style={{
-                    backgroundColor: colors.themecolor,
+                    backgroundColor:
+                      id === '1'
+                        ? colors.themecolor
+                        : id === '2'
+                        ? colors.themecolor2
+                        : colors.themecolor,
                     elevation: 5,
                     width: 'auto',
                     borderRadius: 10,
@@ -746,7 +882,12 @@ const DashBoard = props => {
                         fontFamily: 'NunitoSans_10pt-Bold',
                         fontSize: 19,
                         textAlign: 'center',
-                        color: colors.themecolor,
+                        color:
+                          id === '1'
+                            ? colors.themecolor
+                            : id === '2'
+                            ? colors.themecolor2
+                            : colors.themecolor,
                       }}>
                       Converted
                     </Text>
@@ -755,7 +896,12 @@ const DashBoard = props => {
                         fontFamily: 'NunitoSans_10pt-ExtraBold',
                         fontSize: 19,
                         textAlign: 'center',
-                        color: colors.themecolor,
+                        color:
+                          id === '1'
+                            ? colors.themecolor
+                            : id === '2'
+                            ? colors.themecolor2
+                            : colors.themecolor,
                         flex: 1,
                         alignItems: 'flex-start',
                       }}>
@@ -782,7 +928,12 @@ const DashBoard = props => {
                         fontFamily: 'NunitoSans_10pt-Bold',
                         fontSize: 19,
                         textAlign: 'center',
-                        color: colors.themecolor,
+                        color:
+                          id === '1'
+                            ? colors.themecolor
+                            : id === '2'
+                            ? colors.themecolor2
+                            : colors.themecolor,
                       }}>
                       Received
                     </Text>
@@ -791,7 +942,12 @@ const DashBoard = props => {
                         fontFamily: 'NunitoSans_10pt-ExtraBold',
                         fontSize: 19,
                         textAlign: 'center',
-                        color: colors.themecolor,
+                        color:
+                          id === '1'
+                            ? colors.themecolor
+                            : id === '2'
+                            ? colors.themecolor2
+                            : colors.themecolor,
                         flex: 1,
                       }}>
                       {Quodrder_info
@@ -811,7 +967,12 @@ const DashBoard = props => {
                   rippleOpacity={0.5}
                   rippleDuration={800}
                   style={{
-                    backgroundColor: colors.themecolor,
+                    backgroundColor:
+                      id === '1'
+                        ? colors.themecolor
+                        : id === '2'
+                        ? colors.themecolor2
+                        : colors.themecolor,
                     elevation: 5,
                     width: 'auto',
                     borderRadius: 10,
@@ -853,7 +1014,12 @@ const DashBoard = props => {
                         fontFamily: 'NunitoSans_10pt-Bold',
                         fontSize: 19,
                         textAlign: 'center',
-                        color: colors.themecolor,
+                        color:
+                          id === '1'
+                            ? colors.themecolor
+                            : id === '2'
+                            ? colors.themecolor2
+                            : colors.themecolor,
                       }}>
                       Converted
                     </Text>
@@ -862,7 +1028,12 @@ const DashBoard = props => {
                         fontFamily: 'NunitoSans_10pt-ExtraBold',
                         fontSize: 19,
                         textAlign: 'center',
-                        color: colors.themecolor,
+                        color:
+                          id === '1'
+                            ? colors.themecolor
+                            : id === '2'
+                            ? colors.themecolor2
+                            : colors.themecolor,
                         flex: 1,
                         alignItems: 'flex-start',
                       }}>
@@ -889,7 +1060,12 @@ const DashBoard = props => {
                         fontFamily: 'NunitoSans_10pt-Bold',
                         fontSize: 19,
                         textAlign: 'center',
-                        color: colors.themecolor,
+                        color:
+                          id === '1'
+                            ? colors.themecolor
+                            : id === '2'
+                            ? colors.themecolor2
+                            : colors.themecolor,
                       }}>
                       Received
                     </Text>
@@ -900,7 +1076,12 @@ const DashBoard = props => {
                         fontFamily: 'NunitoSans_10pt-ExtraBold',
                         fontSize: 19,
                         textAlign: 'center',
-                        color: colors.themecolor,
+                        color:
+                          id === '1'
+                            ? colors.themecolor
+                            : id === '2'
+                            ? colors.themecolor2
+                            : colors.themecolor,
                       }}>
                       {Quodrder_info
                         ? Quodrder_info?.yearly_order_converted_in_invoice
@@ -919,7 +1100,12 @@ const DashBoard = props => {
                 fontSize: 24,
                 textAlign: 'center',
                 fontFamily: 'NunitoSans_10pt-Bold',
-                color: colors.themecolor,
+                color:
+                  id === '1'
+                    ? colors.themecolor
+                    : id === '2'
+                    ? colors.themecolor2
+                    : colors.themecolor,
                 textTransform: 'uppercase',
               }}>
               overdue
@@ -952,7 +1138,12 @@ const DashBoard = props => {
                     rippleOpacity={0.5}
                     rippleDuration={800}
                     style={{
-                      backgroundColor: colors.themecolor,
+                      backgroundColor:
+                        id === '1'
+                          ? colors.themecolor
+                          : id === '2'
+                          ? colors.themecolor2
+                          : colors.themecolor,
                       elevation: 5,
                       width: 'auto',
                       borderRadius: 10,
@@ -991,7 +1182,12 @@ const DashBoard = props => {
                           fontFamily: 'NunitoSans_10pt-ExtraBold',
                           fontSize: 19,
                           textAlign: 'center',
-                          color: colors.themecolor,
+                          color:
+                            id === '1'
+                              ? colors.themecolor
+                              : id === '2'
+                              ? colors.themecolor2
+                              : colors.themecolor,
                         }}>
                         {Overdue_info ? Overdue_info?.total_overdue_30_days : 0}
                       </Text>
@@ -1008,7 +1204,12 @@ const DashBoard = props => {
                     rippleOpacity={0.5}
                     rippleDuration={800}
                     style={{
-                      backgroundColor: colors.themecolor,
+                      backgroundColor:
+                        id === '1'
+                          ? colors.themecolor
+                          : id === '2'
+                          ? colors.themecolor2
+                          : colors.themecolor,
                       elevation: 5,
                       width: 'auto',
                       borderRadius: 10,
@@ -1047,7 +1248,12 @@ const DashBoard = props => {
                           fontFamily: 'NunitoSans_10pt-ExtraBold',
                           fontSize: 19,
                           textAlign: 'center',
-                          color: colors.themecolor,
+                          color:
+                            id === '1'
+                              ? colors.themecolor
+                              : id === '2'
+                              ? colors.themecolor2
+                              : colors.themecolor,
                         }}>
                         {Overdue_info ? Overdue_info?.total_overdue_60_days : 0}
                       </Text>
@@ -1064,7 +1270,12 @@ const DashBoard = props => {
                     rippleOpacity={0.5}
                     rippleDuration={800}
                     style={{
-                      backgroundColor: colors.themecolor,
+                      backgroundColor:
+                        id === '1'
+                          ? colors.themecolor
+                          : id === '2'
+                          ? colors.themecolor2
+                          : colors.themecolor,
                       elevation: 5,
                       width: 'auto',
                       borderRadius: 10,
@@ -1103,7 +1314,12 @@ const DashBoard = props => {
                           fontFamily: 'NunitoSans_10pt-ExtraBold',
                           fontSize: 19,
                           textAlign: 'center',
-                          color: colors.themecolor,
+                          color:
+                            id === '1'
+                              ? colors.themecolor
+                              : id === '2'
+                              ? colors.themecolor2
+                              : colors.themecolor,
                         }}>
                         {Overdue_info
                           ? Overdue_info?.total_overdue_above_60_days
